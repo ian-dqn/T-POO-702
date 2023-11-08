@@ -1,0 +1,25 @@
+language: generic
+sudo: required
+
+test:
+# Back 
+- mix deps.get
+- mix ecto.create
+- mix ecto.migrate
+- mix phx.server
+
+# Front
+- npm run serve
+
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_7ec84b649f85_iv -iv $encrypted_7ec84b649f85_key -in epitechK.enc -out /tmp/epitechK -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/epitechK
+- ssh-add /tmp/epitechK
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ssh ubuntu@ec2-13-53-198-196.eu-north-1.compute.amazonaws.com 'bash ./deploy.sh'
+  on:
+    branch: master
