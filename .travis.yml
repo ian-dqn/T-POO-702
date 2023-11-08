@@ -10,17 +10,15 @@ stages:
 
 jobs:
   include:
-    Build & Push Image:
+    - stage: Build & Push Image
       script: - ./build_travisCI.sh
 
-    Deploy:
-      provider: script
-      skip_cleanup: true
-      script: 
-      - openssl aes-256-cbc -K $encrypted_7ec84b649f85_iv -iv $encrypted_7ec84b649f85_key -in epitechK.enc -out /tmp/epitechK -d
-      - eval "$(ssh-agent -s)"
-      - chmod 600 /tmp/epitechK
-      - ssh-add /tmp/epitechK
-      - ssh ubuntu@ec2-13-53-198-196.eu-north-1.compute.amazonaws.com 'bash ./deploy.sh'
+    - stage: Deploy
+      script:
+        - openssl aes-256-cbc -K $encrypted_7ec84b649f85_iv -iv $encrypted_7ec84b649f85_key -in epitechK.enc -out /tmp/epitechK -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/epitechK
+        - ssh-add /tmp/epitechK
+        - ssh ubuntu@ec2-13-53-198-196.eu-north-1.compute.amazonaws.com 'bash ./deploy.sh'
       on:
         branch: master
