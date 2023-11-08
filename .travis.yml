@@ -2,7 +2,7 @@ language: generic
 sudo: required
 
 before_deploy:
-- openssl aes-256-cbc -K $encrypted_7ec84b649f85_iv -iv $encrypted_7ec84b649f85_key -in epitechK.enc -out /tmp/epitechK -d
+- openssl aes-256-cbc -K $encrypted_7ec84b649f85_iv -iv $encrypted_7ec84b649f85_key -in epitechK.pem.enc -out /tmp/epitechK -d
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/epitechK
 - ssh-add /tmp/epitechK
