@@ -14,11 +14,21 @@ defmodule GothamWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", GothamWeb do
-    pipe_through :browser
+	pipeline :auth do
+		plug GothamWeb.JWTAuthPlug
+	end
 
-    get "/", PageController, :home
-  end
+	scope "/api/auth", GothamWeb do
+		pipe_through :auth
+		get "/", AuthController, :get
+		delete "/", AuthController, :delete
+	end
+
+#  scope "/", GothamWeb do
+#    pipe_through :browser
+#
+#    get "/", PageController, :home
+  #end
 
   # Other scopes may use custom stacks.
    scope "/api", GothamWeb do
@@ -34,19 +44,28 @@ defmodule GothamWeb.Router do
      put("/users/:id", UserController, :update)
      delete("/users/:id", UserController, :delete)
 
-
      get("/clocksAll", ClockController, :index)
      get("/clocks/:user_id", ClockController, :get_all_clock_by_userid)
      get("/clocks/data/:id", ClockController, :show)
      post("/clocks/:user_id", ClockController, :create)
 
-     get("/working_timesAll", WorkingTimeController, :index)
-     get("/working_times/:user_id", WorkingTimeController, :get_all_workingTime_by_userid)
-     get("/working_times/:user_id/:id", WorkingTimeController, :get_working_time_by_id)
-     post("/working_times/:user_id", WorkingTimeController, :create)
-     put("/working_times/:id", WorkingTimeController, :update)
-     delete("/working_times/:id", WorkingTimeController, :delete)
-    #get("/working_times/:user_id", WorkingTimeController, :show)
+    #  get("/working_timesAll/", WorkingTimeController, :index)
+    #  get("/working_times/:user_id", WorkingTimeController, :get_all_workingTime_by_userid_and_time)
+    #  get("/working_times/:user_id/:id", WorkingTimeController, :get_working_time_by_id)
+    #  post("/working_times/:user_id", WorkingTimeController, :create)
+    #  put("/working_times/:id", WorkingTimeController, :update)
+    #  delete("/working_times/:id", WorkingTimeController, :delete)
+    # #get("/working_times/:user_id", WorkingTimeController, :show)
+    get("/working_timesAll", WorkingTimeController, :index)
+    get("/working_times/:user_id", WorkingTimeController, :get_all_workingTime_by_userid_and_time)
+    get("/working_timesAll/:user_id", WorkingTimeController, :get_all_workingTime_by_userid)
+    get("/working_times/:user_id/:id", WorkingTimeController, :get_working_time_by_id)
+    post("/working_times/:user_id", WorkingTimeController, :create)
+    put("/working_times/:id", WorkingTimeController, :update)
+    delete("/working_times/:id", WorkingTimeController, :delete)
+
+		post("/inscription", AuthController, :inscription)
+		post("/login", AuthController, :login)
 
 	end
 
