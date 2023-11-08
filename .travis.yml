@@ -11,7 +11,7 @@ stages:
 jobs:
   include:
     - stage: Build & Push Image
-      script: - ./build_travisCI.sh
+      script: ./build_travisCI.sh
 
     - stage: Deploy
       script:
