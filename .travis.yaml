@@ -9,6 +9,8 @@ test:
 - mix phx.server
 
 # Front
+- FROM node:latest
+- npm install
 - npm run serve
 
 before_deploy:
