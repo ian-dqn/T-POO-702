@@ -66,7 +66,7 @@ export default {
           time: currentDate,
         }
         console.log(data);
-        const response = await axios.post(`http://localhost:4000/api/clocks/${user_id}`, { clock: data });
+        const response = await axios.post(`http://13.49.77.13:4000/api/clocks/${user_id}`, { clock: data });
         console.log('Clock créée avec succès:', response.data);
         if(response.data.status) {
           localStorage.setItem("start",JSON.stringify(response.data.time))
@@ -77,7 +77,7 @@ export default {
         this.workingTimeData.user_id = user_id
         this.workingTimeData.end = response.data.time
         console.log(this.workingTimeData)
-        axios.post(`http://localhost:4000/api/working_times/${user_id}`, { working_time: this.workingTimeData })
+        axios.post(`http://13.49.77.13:4000/api/working_times/${user_id}`, { working_time: this.workingTimeData })
           .then(response => {
             console.log('Working time créé avec succès:', response.data);
             localStorage.clear()
