@@ -9,4 +9,4 @@ mix phx.server
 cd ../client
 FROM node:latest
 npm install
-npm run serve
+npm run build
