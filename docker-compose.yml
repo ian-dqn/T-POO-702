@@ -16,6 +16,7 @@ services:
   elixir_server:
     build:
       context: ./gotham
+    # image: ianq/back:latest
     ports:
       - 4000:4000
     depends_on:
@@ -25,6 +26,7 @@ services:
   web_client:
     build: ./client
     container_name: web_client
+    # image: ianq/front:latest
     ports:
       - 8080:8080
     depends_on:
