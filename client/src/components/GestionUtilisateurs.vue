@@ -220,36 +220,61 @@ export default {
       return { hours: hours, minutes: minutes }
     },
 
+    
+    getWeekNumber(date) {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      const weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+      return weekNumber;
+    },
+
     async showDashboard(user_id, startDate, endDate) {
       const start = moment(startDate).format('YYYY-MM-DD HH:mm:SS')
       const end = moment(endDate).format('YYYY-MM-DD HH:mm:SS')
-      const response = await axios.get(
-        `http://13.49.77.13:4000/api/working_times/${user_id}?start=${start}&end=${end}`);
+      const interval = 'week'
+      
+      await axios.get(
+        `http://13.49.77.13:4000/api/working_times/${user_id}?start=${start}&end=${end}`)
+        .then((response) => {
+          const workByInterval = {};
+          const workingTimes = response.data
+          let key;
 
-      const myDates = []
-      response.data.forEach((wt) => myDates.push(wt["start"], wt["end"]));
+          for (const workingTime of workingTimes) {
+            const start = new Date(workingTime.start);
+            const end = new Date(workingTime.end);
 
-      const res = [0]
-      var tmp
-      var i = 0
-      const rLenght = response.data.length
-      console.log(`lenght ${rLenght}`)
+            // Determine the key based on the specified interval
+            if (interval === 'day') {
+              key = start.toDateString();
+            } else if (interval === 'week') {
+              key = this.getWeekNumber(start);
+            } else if (interval === 'month') {
+              key = start.getMonth() + 1;
+            } else if (interval === 'year') {
+              key = start.getFullYear();
+            } else {
+              throw new Error('Invalid interval. Supported values are day, week, month or year');
+            }
 
-      while (i < rLenght) {
-        const lmt = response.data.at(i)
-        tmp = this.calculateWorkingDuration(lmt["start"], lmt["end"], true)
-        res.push(tmp)
-        i++
-        if (i < rLenght) {
-          res.push(tmp)
+            const timeDiff = end - start;
+            workByInterval[key] = (workByInterval[key] || 0) + timeDiff;
+          }
+
+          const labels = Object.keys(workByInterval);
+          const data = labels.map((key) => workByInterval[key]);
+
+          this.chartData = {
+          chartTitle: `Your working time by ${key}`, chartLabels: labels, chartValues: data}
+          this.chartExist = true
+      })
+      .catch((error) => {
+        console.log(error);
         }
-      }
-
-      console.log(`res var ${res}`)
-      this.chartData = {
-        chartTitle: "test graph", chartLabels: myDates, chartValues: res
-      }
-      this.chartExist = true
+      )
+      this.componentKey += 1;
     },
 
     async calculateHoursWorked(wt) {
