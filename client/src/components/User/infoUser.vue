@@ -165,7 +165,7 @@ export default {
       try {
         // Effectuer une requête GET pour obtenir les détails de l'utilisateur
         const response = await axios.get(
-          `http://localhost:4000/api/users/${this.id}`
+          `http://13.49.77.13:4000/api/users/${this.id}`
         );
         console.log(
           "Détails de l'utilisateur récupérés avec succès:",
@@ -185,7 +185,7 @@ export default {
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      await axios.delete("http://localhost:4000/api/auth", {
+      await axios.delete("http://13.49.77.13:4000/api/auth", {
         headers,
       });
       localStorage.clear();
@@ -199,7 +199,7 @@ export default {
         };
         console.log(data);
         const response = await axios.post(
-          `http://localhost:4000/api/clocks/${user_id}`,
+          `http://13.49.77.13:4000/api/clocks/${user_id}`,
           { clock: data }
         );
         console.log("Clock créée avec succès:", response.data);
@@ -215,7 +215,7 @@ export default {
           this.workingTimeData.end = response.data.time;
           console.log(this.workingTimeData);
           axios
-            .post(`http://localhost:4000/api/working_times/${user_id}`, {
+            .post(`http://13.49.77.13:4000/api/working_times/${user_id}`, {
               working_time: this.workingTimeData,
             })
             .then((response) => {
@@ -237,7 +237,7 @@ export default {
       try {
         // Effectuer une requête GET pour obtenir les détails de l'utilisateur
         const response = await axios.get(
-          `http://localhost:4000/api/working_timesAll/${id}`
+          `http://13.49.77.13:4000/api/working_timesAll/${id}`
         );
         this.allWorkingTimes = response.data;
         console.log(this.allWorkingTimes);
@@ -271,7 +271,7 @@ export default {
       // const response =
       await axios
         .get(
-          `http://localhost:4000/api/working_times/${user_id}?start=${start}&end=${end}`
+          `http://13.49.77.13:4000/api/working_times/${user_id}?start=${start}&end=${end}`
         )
         .then((response) => {
           const workByDay = {};

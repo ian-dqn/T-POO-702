@@ -96,7 +96,7 @@ export default {
     async createUser() {
       try {
         // Effectuer une requête POST pour créer un nouvel utilisateur
-        const response = await axios.post("http://localhost:4000/api/inscription", this.user);
+        const response = await axios.post("http://13.49.77.13:4000/api/inscription", this.user);
         console.log("Utilisateur créé avec succès:", response);
         Swal.fire({
           position: "top-end",
@@ -105,7 +105,7 @@ export default {
           showConfirmButton: false,
           timer: 2000,
         }).then(function () {
-          window.location = "http://localhost:8080/";
+          window.location = "http://13.49.77.13:8080/";
         });
         this.user = "";
       } catch (error) {
